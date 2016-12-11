@@ -1,17 +1,11 @@
 var gistId = "136d79db156bc623f101b2903c8a866f";
-var username = "wolfdigit-bot";
-var password = "b68c1ce5a959d9c01fec18aa361087dbdaaa7892";
 
 var gistCache = null;
 function getGist(callback) {
   if (gistCache) return callback(gistCache);
   $.ajax({
     method: "GET",
-    url: "https://api.github.com/gists/"+gistId /*,
-    beforeSend: function (xhr) {
-      xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-    }
-    */
+    url: "https://api.github.com/gists/"+gistId
   })
     .done(function(data) {
       gistCache = data;
@@ -39,8 +33,7 @@ function putFile(filename, data, callback) {
     url: "https://api.github.com/gists/"+gistId,
     data: JSON.stringify(obj),
     beforeSend: function (xhr) {
-      //xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-      xhr.setRequestHeader("Authorization", "token " + password);
+      xhr.setRequestHeader("Authorization", "Basic " + "d29sZmRpZ2l0LWJvdDphMDA3ZmVkYjlkODhmNjZmODI4NjIxODVhNDc0MzFjNzc1YTIyZGU2");
     }
   })
     .done(function(data) {
