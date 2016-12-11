@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>list</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="storage-gist.js"></script>
+<script src="jquery.svg.min.js"></script>
+<style>
+  svg.probSvg {
+    width: 50;
+    height: 50;
+    fill: gray;
+  }
+  svg.probSvg .acBlk {
+    fill: lime;
+  }
+</style>
+</head>
+<body style="height:100%">
+  <div id="input" class="container-fluid" style="padding: 100px;">
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <form class="form-inline" target="_self" onsubmit="javascript:setLid();return false;">
+                <div class="form-group">
+                    <label for="uname">list id:</label>
+                    <input type="text" class="form-control" id="uname" name="uname" placeholder="info17">
+                </div>
+                <button type="submit" class="btn btn-default">Go</button>
+            </form>
+        </div>
+    </div>
+    <script>
+    function setLid() {
+      uname = document.getElementById("uname").value;
+      window.location.href = "#"+uname;
+      window.location.reload();
+    }
+    </script>
+  </div>
+
+  <div id="main" style="display: none; position:relative; height:100%">
+    <table id="tbl" class="table"></table>
+  </div>
+  
+  <script>
+    function drawUser(acs) {
+      if (!acs) acs={acs:[]};
+      else      acs=JSON.parse(acs);
+      retv = $("<div>");
+      Object.keys(probs).forEach(function(tab) {
+        div = $("<div>").css('display', 'inline-block');
+        div.svg({onLoad:function(svg) {
+          $(svg._svg).attr('class', 'probSvg');
+          
+          probs[tab].forEach(function(prob, idx) {
+            //console.log(probs[tab][idx]);
+            pid = probs[tab][idx].pid;
+            if (acs.acs.indexOf(pid)>=0) clas="acBlk";
+            else                         clas="noBlk";
+            svg.rect(Math.floor(idx/10)*5, idx%10*5, 4.5, 4.5, {class: clas});
+          });
+        }});
+        retv.append(div);
+      });
+      //console.log(acs.acs);
+      return retv;
+    }
+    
+    function draw(ulist) {
+      ulist.forEach(function(user) {
+        getFile("gj-"+user['gj'], function(acs) {
+          //console.log(acs);
+          row = $("<tr>");
+          row.append($("<th>"+user['name']+"</th>"));
+          graph = drawUser(acs);
+          row.append($("<td>").append(graph));
+          $("#tbl").append(row);
+        });
+      });
+    }
+    
+    probs = {};
+    function parseProbs(data) {
+      probs = {};
+      data.trim().split("\n").forEach(function(prob) {
+        cols = prob.trim().split("\t");
+        tab = cols[5];
+        if (!probs[tab]) probs[tab]=[];
+        probs[tab].push({pid:cols[0], title:cols[4]});
+      });
+      //console.log(probs);
+      return probs;
+    }
+    
+    userList = [];
+    function main(lid) {
+      $.ajax({
+        url: 'GJProbs.txt',
+        dataType: 'text',
+        type: 'GET'})
+      .done(function(data) {
+        probs = parseProbs(data);
+        getFile("list-"+lid, function(obj) {
+          obj = JSON.parse(obj);
+          userList = obj['user'];
+          draw(userList);
+        });
+      });
+    }
+
+    lid = window.location.hash.substring(1);
+    if (lid.length>0) {
+      main(lid);
+      $("#input").hide();
+      $("#main").show();
+    }
+  </script>
+</body>
+</html>

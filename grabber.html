@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>GJ grabber</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="storage-gist.js"></script>
+</head>
+<body>
+  <div id="input" class="container-fluid" style="padding: 100px;">
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <form class="form-inline" target="_self" onsubmit="javascript:setUname();return false;">
+                <div class="form-group">
+                    <label for="uname">uva username:</label>
+                    <input type="text" class="form-control" id="uname" name="uname" placeholder="wolfdigit">
+                </div>
+                <button type="submit" class="btn btn-default">Go</button>
+            </form>
+        </div>
+    </div>
+    <script>
+    function setUname() {
+      uname = document.getElementById("uname").value;
+      window.location.href = "#"+uname;
+      window.location.reload();
+    }
+    </script>
+  </div>
+
+  <div id="main" style="display: none">
+    <iframe id="ifrm" name="ifrm" src="" style="height:100%; width:45%; display:inline-block"></iframe>
+    <div style="height:100%; width:45%; display:inline-block; position: relative">
+      <textarea id='pasteHtml' style="width:100%; height: 80%">Paste</textarea>
+      <div id="sandbox" style="width: 100%; height: 20%; overflow: scroll"></div>
+    </div>
+  </div>
+  
+  <script>
+    function handlePaste (e) {
+      var clipboardData, pastedData;
+
+      // Stop data actually being pasted into div
+      e.stopPropagation();
+      e.preventDefault();
+
+      // Get pasted data via clipboard API
+      clipboardData = e.clipboardData || window.clipboardData;
+      //console.log(clipboardData.getData('text/html'));
+      pastedData = clipboardData.getData('Text/Html');
+
+      // Do whatever with pasteddata
+      e.target.value = pastedData;
+      
+      parseHtml(pastedData);
+    }
+
+    document.getElementById('pasteHtml').addEventListener('paste', handlePaste);
+  </script>
+    
+  <script>
+    function parseHtml(html) {
+      //getFile("file2", function(data){
+      //  console.log(data);
+      //});
+      //putFile("testFile.txt", "{abc:123}");
+      $("#sandbox").html(html);
+      uname = $('#sandbox a[href^="http://www.tcgs.tc.edu.tw:1218/SendIMessage"]').parent().text().trim();
+      console.log(uname);
+      if (!uname) { return; }
+
+      acs = [];
+      elemList = $("#sandbox fieldset > a");
+      elemList/*.slice(10,13)*/.each(function(idx) {
+        id = $(this).attr("id");
+        pid = $(this).text();
+        //console.log(idx+": "+id+", "+pid);
+        //if (id=="acstyle") acs[pid] = true;
+        //else               acs[pid] = false;
+        if (id=="acstyle") acs.push(pid);
+      });
+      console.log(acs);
+      
+      putFile("gj-"+uname, JSON.stringify({update_time:new Date().toISOString(), acs:acs}));
+    }
+    
+    function main(uname) {
+      url = "http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account="+uname;
+      $("#ifrm").attr('src', url);
+    }
+
+    uname = window.location.hash.substring(1);
+    if (uname.length>0) {
+      main(uname);
+      $("#input").hide();
+      $("#main").show();
+    }
+  </script>
+</body>
+</html>
