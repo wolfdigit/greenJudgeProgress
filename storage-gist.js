@@ -7,10 +7,11 @@ function getGist(callback) {
   if (gistCache) return callback(gistCache);
   $.ajax({
     method: "GET",
-    url: "https://api.github.com/gists/"+gistId,
+    url: "https://api.github.com/gists/"+gistId /*,
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
     }
+    */
   })
     .done(function(data) {
       gistCache = data;
