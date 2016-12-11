@@ -39,7 +39,8 @@ function putFile(filename, data, callback) {
     url: "https://api.github.com/gists/"+gistId,
     data: JSON.stringify(obj),
     beforeSend: function (xhr) {
-      xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+      //xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+      xhr.setRequestHeader("Authorization", "token " + password);
     }
   })
     .done(function(data) {
