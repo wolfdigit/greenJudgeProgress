@@ -91,6 +91,18 @@
     }
     
     function main(lid) {
+    	getFile("list-"+lid, function(data) {
+    		$("#preview").text(data);
+    		if (!data) return;
+    		obj = JSON.parse(data);
+    		if (!obj) return;
+    		users = obj.user;
+    		retv = "";
+    		users.forEach(function(user) {
+    			retv += user.name + "\t" + user.gj + "\t" + user.zj + "\n";
+    		});
+    		$("#tsv").text(retv);
+    	});
     }
 
     lid = window.location.hash.substring(1);
