@@ -74,7 +74,7 @@
         getFile("gj-"+user['gj'], function(acs) {
           //console.log(acs);
           row = $("<tr>");
-          row.append($("<th>"+user['name']+"</th>"));
+          row.append($('<th><a href="http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account='+user['gj']+'">'+user['name']+'</a></th>'));
           graph = drawUser(acs);
           row.append($("<td>").append(graph));
           $("#tbl").append(row);
