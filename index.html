@@ -62,7 +62,9 @@
             if (acs.acs.indexOf(pid)>=0) clas="acBlk";
             else                         clas="noBlk";
             blk_P_row = 5;
-            svg.rect(Math.floor(idx/blk_P_row)*5.5, idx%blk_P_row*5, 5-Math.floor(idx/blk_P_row)%2*0.5, 4.5, {class: clas});
+            x = Math.floor(idx/blk_P_row);
+            y = idx%blk_P_row;
+            svg.rect(x*5+Math.floor(x/2)*3, y*5, 4.5, 4.5, {class: clas});
           });
         }});
         retv.append(div);
