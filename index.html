@@ -61,7 +61,8 @@
             pid = probs[tab][idx].pid;
             if (acs.acs.indexOf(pid)>=0) clas="acBlk";
             else                         clas="noBlk";
-            svg.rect(Math.floor(idx/10)*5, idx%10*5, 4.5, 4.5, {class: clas});
+            blk_P_row = 5;
+            svg.rect(Math.floor(idx/blk_P_row)*5, idx%blk_P_row*5, 4.5+Math.floor(idx/blk_P_row)%2*0.3, 4.5, {class: clas});
           });
         }});
         retv.append(div);
