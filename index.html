@@ -10,8 +10,8 @@
 <script src="jquery.svg.min.js"></script>
 <style>
   svg.probSvg {
-    width: 50;
-    height: 50;
+    width: 110;
+    height: 25;
     fill: gray;
   }
   svg.probSvg .acBlk {
@@ -64,7 +64,7 @@
             blk_P_row = 5;
             x = Math.floor(idx/blk_P_row);
             y = idx%blk_P_row;
-            svg.rect(x*5+Math.floor(x/2)*3, y*5, 4.5, 4.5, {class: clas});
+            svg.rect(x*5+Math.floor(x/2)*3, y*5, 4.0, 4.0, {class: clas});
           });
         }});
         retv.append(div);
