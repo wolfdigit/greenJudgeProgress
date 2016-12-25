@@ -49,7 +49,7 @@
   <script>
     function drawUser(acs) {
       retv = $("<div>");
-      retv.append($('<div>').css('display', 'inline-block').text(acs.acs.length+": ").css('width','3em'));
+      retv.append($('<div data-toggle="tooltip" data-placement="bottom" title="update: '+acs.update_time+'" style="display:inline-block; width:3em">').text(acs.acs.length+": "));
       Object.keys(probs).forEach(function(tab) {
         div = $("<div>").css('display', 'inline-block');
         div.svg({onLoad:function(svg) {
@@ -79,8 +79,7 @@
           row = $("<tr>");
           if (!acs) acs={update_time:"",acs:[]};
           else      acs=JSON.parse(acs);
-          lastUpdate = acs.update_time;
-          row.append($('<th><a href="http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account='+user['gj']+'" data-toggle="tooltip" data-placement="bottom" title="update: '+lastUpdate+'">'+user['name']+'</a></th>'));
+          row.append($('<th><a href="http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account='+user['gj']+'">'+user['name']+'</a></th>'));
           graph = drawUser(acs);
           row.append($("<td>").append(graph));
           $("#tbl").append(row);
