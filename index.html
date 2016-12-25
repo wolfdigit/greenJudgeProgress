@@ -48,8 +48,6 @@
   
   <script>
     function drawUser(acs) {
-      if (!acs) acs={acs:[]};
-      else      acs=JSON.parse(acs);
       retv = $("<div>");
       Object.keys(probs).forEach(function(tab) {
         div = $("<div>").css('display', 'inline-block');
@@ -78,7 +76,10 @@
         getFile("gj-"+user['gj'], function(acs) {
           //console.log(acs);
           row = $("<tr>");
-          row.append($('<th><a href="http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account='+user['gj']+'">'+user['name']+'</a></th>'));
+          if (!acs) acs={update_time:"",acs:[]};
+          else      acs=JSON.parse(acs);
+          lastUpdate = acs.update_time;
+          row.append($('<th><a href="http://www.tcgs.tc.edu.tw:1218/ShowUserStatistic?account='+user['gj']+'" data-toggle="tooltip" data-placement="bottom" title="'+lastUpdate+'">'+user['name']+'</a></th>'));
           graph = drawUser(acs);
           row.append($("<td>").append(graph));
           $("#tbl").append(row);
@@ -113,6 +114,8 @@
           draw(userList);
         });
       });
+      
+      $('[data-toggle="tooltip"]').tooltip();
     }
 
     lid = window.location.hash.substring(1);
