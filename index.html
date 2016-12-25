@@ -49,7 +49,7 @@
   <script>
     function drawUser(acs) {
       retv = $("<div>");
-      retv.append($('<div>').css('display', 'inline-block').text(acs.acs.length+": "));
+      retv.append($('<div>').css('display', 'inline-block').text(acs.acs.length+": ").css('width','3em'));
       Object.keys(probs).forEach(function(tab) {
         div = $("<div>").css('display', 'inline-block');
         div.svg({onLoad:function(svg) {
