@@ -44,12 +44,17 @@
 
   <div id="main" style="display: none; position:relative; height:100%">
     <table id="tbl" class="table"></table>
+    <div id="msg" class="alert alert-info" role="alert"></div>
   </div>
   
   <script>
+    maxUpdate = "0000-00-00";
+    minUpdate = "9999-99-99";
     function drawUser(acs) {
       retv = $("<div>");
       retv.append($('<div data-toggle="tooltip" data-placement="bottom" title="update: '+acs.update_time+'" style="display:inline-block; width:3em">').text(acs.acs.length+": "));
+      if (acs.update_time>maxUpdate) maxUpdate = acs.update_time;
+      if (acs.update_time<minUpdate) minUpdate = acs.update_time;
       Object.keys(probs).forEach(function(tab) {
         div = $("<div>").css('display', 'inline-block');
         div.svg({onLoad:function(svg) {
@@ -87,6 +92,7 @@
       });
       
       $('[data-toggle="tooltip"]').tooltip();
+      $('#msg').text("update time: "+minUpdate+" ~ "+maxUpdate);
     }
     
     probs = {};
